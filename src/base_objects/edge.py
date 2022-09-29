@@ -2,13 +2,16 @@ from base_objects.node import Node
 
 
 class Edge:
-    def __init__(self, left_node: Node, right_node: Node, **attributes):
+    def __init__(self, left_node: Node, right_node: Node, alias = None, **attributes):
         self.nodes = (left_node, right_node)
 
         if attributes is None:
             self.attrs = {}
         else:
             self.attrs = attributes
+
+        self._set_alias(alias)
+        
 
     def __len__(self):
         """
@@ -45,8 +48,29 @@ class Edge:
         Example:
             str(self)
         """
-        return f"{str(self.nodes)} : {str(self.attrs)}"
+        return self._get_description_str()
 
     def __repr__(self):
         """Cast to str by programm."""
-        return f"{str(self.nodes)} : {str(self.attrs)}"
+        return self._get_description_str()
+
+    def _get_description_str(self):
+        if self.__alias is None:
+            return f"{str(self.nodes)} : {str(self.attrs)}"
+        else:
+            temp = {
+                'left_node' : self.nodes[0],
+                'right_node': self.nodes[1],
+            }
+            return f"{str(self.__alias)} : {str(temp | self.attrs)}"
+
+    def _set_alias(self, alias):
+        self.__alias = alias
+
+    def _get_alias(self):
+        return self.__alias
+
+    def _del_alias(self):
+        self.__alias = None
+
+    alias = property(_get_alias, _set_alias, _del_alias)
