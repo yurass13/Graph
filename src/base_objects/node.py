@@ -51,7 +51,7 @@ class Node:
 
     def __str__(self):
         """
-        Cats to str by user
+        Cast to str by user
 
         Example:
             str(self)

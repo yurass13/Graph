@@ -1,13 +1,9 @@
-from node import Node
+from base_objects.node import Node
 
 
 class Edge:
-    def __init__(self, *nodes, **attributes):
-        if isinstance(nodes, [list, tuple, set]):
-            left_node, right_node = nodes
-            self.nodes = (Node(left_node), Node(right_node))
-        else:
-            return None
+    def __init__(self, left_node: Node, right_node: Node, **attributes):
+        self.nodes = (left_node, right_node)
 
         if attributes is None:
             self.attrs = {}
@@ -44,7 +40,7 @@ class Edge:
 
     def __str__(self):
         """
-        Cats to str by user
+        Cast to str by user
 
         Example:
             str(self)
