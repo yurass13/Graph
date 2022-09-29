@@ -10,8 +10,7 @@ class Edge:
         else:
             self.attrs = attributes
 
-        self._set_alias(alias)
-        
+        self.alias = alias
 
     def __len__(self):
         """
@@ -55,22 +54,11 @@ class Edge:
         return self._get_description_str()
 
     def _get_description_str(self):
-        if self.__alias is None:
+        if self.alias is None:
             return f"{str(self.nodes)} : {str(self.attrs)}"
         else:
             temp = {
                 'left_node' : self.nodes[0],
                 'right_node': self.nodes[1],
             }
-            return f"{str(self.__alias)} : {str(temp | self.attrs)}"
-
-    def _set_alias(self, alias):
-        self.__alias = alias
-
-    def _get_alias(self):
-        return self.__alias
-
-    def _del_alias(self):
-        self.__alias = None
-
-    alias = property(_get_alias, _set_alias, _del_alias)
+            return f"{{{self.alias} : {temp | self.attrs}}}"
