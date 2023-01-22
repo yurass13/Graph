@@ -1,4 +1,7 @@
 """Base class of node."""
+
+from uuid import uuid1
+
 class Node:
     """
     Base class of node object.
@@ -15,10 +18,11 @@ class Node:
             name - unique name of node.
             kwargs - attributes of node
         """
-        self.name = name
+        self.name = name if name is not None else uuid1()
         if kwargs is None:
             self.attrs = {}
         else:
+            # TODO Some shit with kwargs
             self.attrs = kwargs
 
     def __len__(self):
@@ -56,8 +60,16 @@ class Node:
         Example:
             str(self)
         """
-        return f"{str(self.name)} : {str(self.attrs)}"
+        quote = '\''
+        return "{key} : {value}".format(
+            key = self.name if isinstance(self.name, int) else quote + self.name + quote,
+            value =  str(self.attrs)
+        )
 
     def __repr__(self):
         """Cast to str by programm."""
-        return f"{str(self.name)} : {str(self.attrs)}"
+        quote = '\''
+        return "{key} : {value}".format(
+            key = self.name if isinstance(self.name, int) else quote + self.name + quote,
+            value =  str(self.attrs)
+        )

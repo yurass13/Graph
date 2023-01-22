@@ -50,7 +50,7 @@ class Edge:
         return self._get_description_str()
 
     def __repr__(self):
-        """Cast to str by programm."""
+        """Cast to str for programm output."""
         return self._get_description_str()
 
     def _get_description_str(self):
