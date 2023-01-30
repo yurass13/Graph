@@ -1,3 +1,6 @@
-from .graph import Graph
-from .edge import Edge
-from .node import Node
+from .base_objects import (
+    Node,
+    Edge,
+    Graph
+)
+
