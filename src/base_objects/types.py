@@ -7,6 +7,10 @@ NAME = str
 PARAMS = Dict[str, Any]
 
 
+# TODO Rewrite Nodes, Edges using dataclasses as model
+# TODO Create controllers for Attributed objects
+# TODO Controller must have logic for work with attributes in all models.(controller.attr['some_attr'].apply() or ect)
+
 class BaseAttributed:
     
     def __init__(self, name: NAME, **attributes: Optional[PARAMS]) -> None:

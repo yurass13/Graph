@@ -1,0 +1,15 @@
+1. types.py:
+    - Rewrite Nodes, Edges using dataclasses using BaseAttributed as base model (all methods must be in current controller for this model).
+    - Create controllers for Attributed objects.
+    - Controller must have logic for work with attributes in all models.(controller.attr['some_attr'].apply() or ect).
+    - Delegate logic from Graph to <BaseAttributed>Controller
+
+2. Base objects
+    - Add nodes
+        - type-checker as strategy creation.
+        - chain of responce for creation.
+    - Add add_edge method
+    - Add add_edges method.
+    - Add view by sample method.
+    - Create more strategies of view graph.
+    - (Optional) id, name or ect for Graph (if it'll be needed in view or spliting on subgraphs).
