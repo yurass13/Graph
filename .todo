@@ -13,3 +13,5 @@
     - Add view by sample method.
     - Create more strategies of view graph.
     - (Optional) id, name or ect for Graph (if it'll be needed in view or spliting on subgraphs).
+
+3. Optimise testing process.
