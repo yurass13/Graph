@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "graph"
+version = "0.1.0"
+description = "Graph - Core for a lib with graph algorythms."
+authors = ["Yury Stolpov <yurass130@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "base_objects", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^1.5.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
