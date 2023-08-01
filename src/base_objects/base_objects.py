@@ -8,6 +8,83 @@ from copy import deepcopy
 
 from pandas import DataFrame
 
+"""
+TODO Refactor plan:
+    - Refactor types.py:
+        - Interface Name - add :param name[get]: str
+            NOTE name should be protected.
+            NOTE try cast all types to str.
+            NOTE name has brackets if it contains spacer literal:
+                >>> named = Name('with space')
+                >>> print(named.name)
+                (with spase)
+                ...
+        - Interface Alias(Name) - add :param alias[get, set]: str
+            NOTE __str__ -> f"{alias}({name})" if alias setted.
+        - Interface Attributes - add descriptor attrs[get, set]: dict
+            NOTE set object Iterable. Call iter - iterate attrs.
+
+    - Refactor test_node.py
+        - Test Creation and node logic
+            - Node(name, **attrs)
+        - Tests for Name
+        - Tests for Attributes
+
+    - Refactor class Node(Name, Attributes)
+        - init?
+        - str, repr magic
+
+    - Refactor test_edge.py
+        - Test Creation and edge logic
+            - Edge(nodes: Tuple(Node, Node),
+                   alias: Optional[str],
+                   oriented:bool = False,
+                   **attrs)
+            - :param is_oriented[get, set].
+                NOTE :param name changing on :param oriented changed.
+                NOTE when Edge is oriented mean than left_node -> right_node.
+                    else left_node -> right_node and right_node -> left_node,
+                    NOTE exclude situation, when left_node is right_node.
+                        SAMPLE Edge.name -> f'({left_node} - LOOPED)'
+            - Cast str and repr logic.
+                NOTE name -> (Node.name -> Node.name) when oriented. 
+                NOTE name -> (Node.name == Node.name) when NOT oriented. 
+                str(edge)-> alias(name): {**attrs}
+                str(edge)-> (name): {**attrs}
+            - left_node[get], right_node[get] property.
+        - Test for Alias, Name logic
+        - Test for Attributes
+    - Refactor class Edge(Alias, Attributes)
+        - Check init.
+        - Create left, right properties[get]
+        - Relation literal strategy. (cls)
+        - Name builder. (cls)
+        - Overrite setter for :param name.
+        - str, repr magic.
+    - Create tests for graph.
+        TODO test plan
+    - Refactor(rewrite) class Graph.
+        - Controller for nodes set. (descriptor)
+            [add:uniq, del->del Edges, get]
+            NOTE Node.name is unique.
+            NOTE Node on delete should trigger check edges.
+        - Controller for edges list. (descriptor).
+            - dfs (generator)
+            - bfs (generator)
+            - indexing, searching alogorythms?
+            - searching by name and by alias.
+            NOTE Edge.alias is unique.
+        - Contains states:
+            - Update it on call single update. 
+                TODO show warning that group methods in priority
+                - push: total_old or pushed.
+                - pop: total_old and poped: on change - full check.
+            - Update it on group update. (priority)
+                -||- 
+            NOTE strategy by type input with decorator before call.
+"""
+
+
 class Node(BaseAttributed):
     """Graph node class.
 
