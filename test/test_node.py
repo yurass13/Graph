@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Any, Dict, List
 
 from copy import deepcopy
 
@@ -6,7 +6,7 @@ from base_objects import Node
 
 
 _lamb =  lambda x: x/2
-CASES = [
+CASES:List[Dict[str, Any]] = [
         # Without attrs, name type - int
         {
             'proto': {
@@ -104,7 +104,7 @@ def test_node_name_set() -> None:
 
     is_immutable = False
     try:
-        node.name = 'name changed'
+        node.name = 'name changed' # type: ignore
     except AttributeError:
         is_immutable = True
 
@@ -142,7 +142,7 @@ def test_node_iterable() -> None:
             info.append({'len': f"\nTake:\n{len(node)}\nExpected:\n{expected_node_len}"})
 
     except AttributeError as exception:
-        info.append({'len': exception})
+        info.append({'len': str(exception)})
 
     try:
         attrs = deepcopy(_case['proto'])
@@ -151,7 +151,7 @@ def test_node_iterable() -> None:
         if not list(iter(node)) == list(iter(attrs)):
             info.append({'iter': f"\nTake:\n{list(iter(node))}\nExpected:\n{list(iter(attrs))}"})
     except AttributeError as exception:
-        info.append({'iter': exception})
+        info.append({'iter': str(exception)})
 
     assert len(info) == 0, f"Failed cases info:\n{info}\n"
 
@@ -167,13 +167,13 @@ def test_node_attrs_set() -> None:
         node['val'] = 2
         _add = True
     except Exception as exception:
-        info.append({'add': exception})
+        info.append({'add': str(exception)})
 
     try:
         del node['kwg']
         _del = True
     except Exception as exception:
-        info.append({'del': exception})
+        info.append({'del': str(exception)})
 
     assert f'{node}' == expected and _add and _del, f"Errors:\n{info},\nTake:\n{node}\nExpected:\n{expected}"
 

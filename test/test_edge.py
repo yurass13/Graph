@@ -4,20 +4,20 @@ from base_objects import Edge, Node
 CASES = [
     {
         'proto': {
-            'nodes': (Node(1), Node('2'))
+            'nodes': (Node(1), Node('2')) # type: ignore
         },
         'require_str': "(1 == 2): {}"
     },
     {
         'proto': {
-            'nodes': (Node(1), Node('2')),
+            'nodes': (Node(1), Node('2')), # type: ignore
             'alias': 'Named'
         },
         'require_str': "Named(1 == 2): {}"
     },
     {
         'proto': {
-            'nodes': (Node(1), Node('2')),
+            'nodes': (Node(1), Node('2')), # type: ignore
             'alias': 'Named',
             'oriented': True
         },
@@ -25,7 +25,7 @@ CASES = [
     },
     {
         'proto': {
-            'nodes': (Node(1), Node('2')),
+            'nodes': (Node(1), Node('2')), # type: ignore
             'alias': 'Named',
             'oriented': True,
             'variable': 'some str',
