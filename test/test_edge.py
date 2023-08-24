@@ -1,7 +1,9 @@
 from base_objects import Edge, Node
 
+from typing import Any, List
+
 # TODO test_edge_creation 
-CASES = []
+CASES: List[Any] = []
 
 def test_edge_cretion():
     message = ""
