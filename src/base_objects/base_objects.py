@@ -1,8 +1,8 @@
 """Module contins base objects for lib core."""
 from __future__ import annotations
-from typing import Any, Dict, Literal, Optional, Tuple, Iterable
+from typing import Any, Dict, Iterable, Literal, Optional, Tuple, Union
 
-from .types import BaseAttributed, NAME, PARAMS, A
+from .types import NAME, PARAMS, NameMixin, AliasMixin, AttributesMixin
 
 from copy import deepcopy
 
@@ -84,15 +84,24 @@ TODO Refactor plan:
             NOTE strategy by type input with decorator before call.
 """
 
+class Node(NameMixin, AttributesMixin):
+    """Base  Node class for graph.
 
-class Node(BaseAttributed):
-    """Graph node class.
-
-    Class Parameters:
+    Parameters(from BaseAttributed):
         name: NAME - unique name of node.
         attrs: PARAMS - attributes of node.
     """
-    pass
+    def __init__(self, name:NAME,  **attributes: Optional[PARAMS]) -> None:
+        NameMixin.__init__(self, name)
+        AttributesMixin.__init__(self, **attributes)
+        
+
+    def __str__(self) -> str:
+        return f"{NameMixin.__str__(self)}: {AttributesMixin.__str__(self)}"
+
+
+    def __repr__(self) -> str:
+        return f"{NameMixin.__repr__(self)}: {AttributesMixin.__repr__(self)}"
 
 
 class Edge(BaseAttributed):
