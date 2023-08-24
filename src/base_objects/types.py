@@ -1,21 +1,77 @@
-"""Module for constant type-aliases."""
-from __future__ import annotations
+"""Module for constant type aliases and mixins."""
 
-from typing import Any, Dict, Iterator, Optional, TypeVar
+from typing import Any, Dict, Iterator, Optional
+
+import re
+
 
 NAME = str
 PARAMS = Dict[str, Any]
 
 
-# TODO Rewrite Nodes, Edges using dataclasses as model
-# TODO Create controllers for Attributed objects
-# TODO Controller must have logic for work with attributes in all models.(controller.attr['some_attr'].apply() or ect)
+class NameMixin:
+    """ Interface Name - add :param name[get]: str
+        NOTE name should be protected.
+        NOTE try cast all types to str.
+        NOTE name has brackets if it contains spacer literal:
+            >>> named = Name('with space')
+            >>> print(named.name)
+            (with spase)
+            ...
+    """
+    def __init__(self, name: NAME, *args, **kwargs) -> None:
+        if isinstance(name, str):
+            self._name = name
+        else:
+            self._name = str(name)
 
-class BaseAttributed:
-    
-    def __init__(self, name: NAME, **attributes: Optional[PARAMS]) -> None:
-        self.name: NAME = name if isinstance(name, str) else str(name)
-        self.attrs: PARAMS = attributes if attributes is not None else {}
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def __str__(self) -> str:
+        if len(re.findall(r'\s', self.name)) > 0:
+            return f"({self.name})"
+        else:
+            return f"{self.name}"
+
+
+    def __repr__(self) -> str:
+        if len(re.findall(r'\s', self.name)) > 0:
+            return f"({self.name})"
+        else:
+            return f"{self.name}"
+
+
+class AliasMixin(NameMixin):
+    """Interface Alias(Name) - add :param alias[get, set]: str
+        NOTE __str__ -> f"{alias if alias setted else ''}{Name.name}".
+    """
+    def __init__(self, name, alias, *args, **kwargs) -> None:
+        NameMixin.__init__(self, name=name)
+        self.alias = alias
+
+
+    def __str__(self) -> str:
+        return f"{'' if self.alias is None else self.alias}{super().__str__()}"
+
+
+    def __repr__(self) -> str:
+        return f"{'' if self.alias is None else self.alias}{super().__repr__()}"
+
+
+# TODO should be sorted?
+class AttributesMixin:
+    """Interface Attributes - add descriptor attrs[get, set]: dict
+        NOTE set object Iterable. Call iter - iterate attrs.
+    """
+    def __init__(self, **attrs: Optional[PARAMS]) -> None:
+
+        if attrs is None:
+            self.attrs:PARAMS = {}
+        else:
+            self.attrs= attrs
 
 
     def __len__(self) -> int:
@@ -43,10 +99,8 @@ class BaseAttributed:
 
 
     def __str__(self) -> str:
-        return f"{self.name} : {self.attrs}"
+        return f"{self.attrs}"
 
 
     def __repr__(self) -> str:
-        return f"{self.name} : {self.attrs}"
-
-A = TypeVar('A', bound=BaseAttributed)
+        return f"{self.attrs}"
