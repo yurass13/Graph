@@ -104,69 +104,59 @@ class Node(NameMixin, AttributesMixin):
         return f"{NameMixin.__repr__(self)}: {AttributesMixin.__repr__(self)}"
 
 
-# class Edge(BaseAttributed):
-#     """Graph edge Class
-#         __init__ from BaseAttributed - overrited.
+class Edge(AliasMixin, AttributesMixin):
+    # TODO wait tests
+    """Base Edge class for graph"""
+    def __init__(self,
+                 nodes:Tuple[Node, Node],
+                 alias:Optional[str] = None,
+                 oriented: bool = False,
+                 **attributes: Optional[PARAMS]
+            ) -> None:
 
-#     Params:
-#         left_node: Node
-#             When **is_orient** setted True means that it have link to **right_node**
-#                 else means than they has relation.
-#         right_node: Node
-#             Second node.
-#         :param name:str - alias of Edge; using in all casts for str.
-#         :param is_oriented: bool, default: False
-#             When True set Edge to directed (change str cast from left_node to right_node).
-#         attributes: - another attributes of Edge.
+        AliasMixin.__init__(self,
+                            self._get_name(*nodes, oriented),
+                            alias)
+        AttributesMixin.__init__(self, **attributes)
 
-#     Note:
-#         After init call nodes saving in **<Edge>.nodes** as Tuple[(**left_node**, **right_node**)];
-#     """
-
-#     def __init__(
-#         self,
-#         left_node: Node,
-#         right_node: Node,
-#         alias: Optional[NAME] = None,
-#         is_oriented:bool = False,
-#         **attributes: Optional[PARAMS]
-#     ) -> None:
-#         self._oriented: bool = is_oriented
-
-#         self.nodes: Tuple[(Node, Node)] = (left_node, right_node)
-#         self.attrs: PARAMS = attributes if attributes is not None else {}
-
-#         self.alias = alias
-#         self.name = self.nodes[0].name + self.__get_relation_literal() + self.nodes[1].name
+        self._nodes = nodes
+        self.is_oriented = oriented
 
 
-#     def __get_relation_literal(self) -> Literal[' == '] | Literal[' -> ']:
-#         return ' -> ' if self._oriented else ' == '
+    @property
+    def left_node(self):
+        return self._nodes[0]
 
 
-#     def is_orient(self) -> bool:
-#         return self._oriented
+    @property
+    def right_node(self):
+        return self._nodes[1]
 
 
-#     def __repr__(self) -> str:
-#         if self.alias is None:
-#             return super().__repr__()
-#         else:
-#             return (
-#                 self.alias + 
-#                 f"\n{super().__repr__()}"
-#             )
+    @classmethod
+    def _get_relation_literal(cls, is_oriented) -> Union[Literal['=='], Literal['->']]:
+        return '->' if is_oriented else '=='
 
 
-#     def __str__(self) -> str:
-#         if self.alias is None:
-#             return super().__str__()
-#         else:
-#             return (
-#                 self.alias +
-#                 '\n' +
-#                 super().__str__()
-#             )
+    @classmethod
+    def _get_name(cls, left_node:Node, right_node:Node, is_oriented:bool) -> str:
+        return f"{left_node.name} {cls._get_relation_literal(is_oriented)} {right_node.name}"
+
+
+    def __setattr__(self, __name: str, __value: Any) -> None:
+        """We should change relation symbol in name on change is_oriented."""
+        super().__setattr__(__name, __value)
+
+        if __name == 'is_oriented':
+            self._name = self._get_name(self.left_node, self.right_node, __value)
+
+
+    def __str__(self) -> str:
+        return f"{AliasMixin.__str__(self)}: {AttributesMixin.__str__(self)}"
+
+
+    def __repr__(self) -> str:
+        return f"{AliasMixin.__repr__(self)}: {AttributesMixin.__repr__(self)}"
 
 
 # class Graph:
